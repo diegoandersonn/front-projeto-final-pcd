@@ -1,50 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-
-type Pedido = {
-  id: string;
-  cliente: string;
-  item: string;
-  status: string;
-};
+import useGetPedidos from "../hooks/useGetPedidos";
+import usePostPedidos from "../hooks/usePostPedidos";
+import CreatePedidoType from "../types/createPedidoType";
 
 export default function Home() {
   const [cliente, setCliente] = useState("");
   const [item, setItem] = useState("");
 
-  const queryClient = useQueryClient();
-
-  const pedidos = useQuery<Pedido[]>({
-    queryKey: ["pedidos"],
-    queryFn: async () => {
-      const resposta = await fetch("http://localhost:3001/api/pedidos");
-      return resposta.json();
-    },
-  });
-
-  const criarPedido = useMutation({
-    mutationFn: async () => {
-      const resposta = await fetch("http://localhost:3001/api/pedidos", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          cliente,
-          item,
-        }),
-      });
-
-      return resposta.json();
-    },
-    onSuccess: () => {
-      setCliente("");
-      setItem("");
-      queryClient.invalidateQueries({ queryKey: ["pedidos"] });
-    },
-  });
+  const pedidos = useGetPedidos();
+  const criarPedido = usePostPedidos();
 
   function enviarPedido(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -54,8 +20,20 @@ export default function Home() {
       return;
     }
 
-    criarPedido.mutate();
+    const novoPedido: CreatePedidoType = {
+      cliente,
+      item,
+    };
+
+    criarPedido.mutate(novoPedido, {
+      onSuccess: () => {
+        setCliente("");
+        setItem("");
+      }
+    });
   }
+
+  console.log(pedidos.data);
 
   return (
     <main className="min-h-screen bg-slate-100 p-6">
@@ -81,7 +59,7 @@ export default function Home() {
               Novo Pedido
             </h2>
 
-            <form onSubmit={enviarPedido} className="space-y-4">
+            <form onSubmit={enviarPedido} className="space-y-4 text-slate-700">
               <div>
                 <label className="mb-1 block text-sm font-medium text-slate-700">
                   Nome do cliente
