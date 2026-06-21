@@ -2,6 +2,12 @@
 
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import useRealtimeUpdates from "../hooks/useRealtimeUpdates";
+
+function RealtimeUpdates() {
+  useRealtimeUpdates();
+  return null;
+}
 
 export function Providers({
   children,
@@ -11,6 +17,9 @@ export function Providers({
   const [queryClient] = useState(() => new QueryClient());
 
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <RealtimeUpdates />
+      {children}
+    </QueryClientProvider>
   );
 }

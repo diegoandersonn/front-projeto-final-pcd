@@ -1,12 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import PedidoType from "../types/pedidoType";
+import StatusEnum from "../enums/statusEnum";
+
+type UpdatePedidoInput = {
+  id: string;
+  status: StatusEnum;
+};
 
 const useUpdatePedido = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (pedido: PedidoType) => {
-      const response = await fetch(`http://localhost:3001/api/pedidos/${pedido.id}`, {
+    mutationFn: async (pedido: UpdatePedidoInput) => {
+      const response = await fetch(`/rpc/pedidos/${pedido.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

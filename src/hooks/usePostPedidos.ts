@@ -5,7 +5,7 @@ const usePostPedidos = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: async (data: CreatePedidoType) => {
-      const resposta = await fetch("http://localhost:3001/api/pedidos", {
+      const resposta = await fetch("/rpc/pedidos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
