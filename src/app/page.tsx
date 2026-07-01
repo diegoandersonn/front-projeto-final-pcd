@@ -4,7 +4,6 @@ import { useState } from "react";
 import useGetPagamentos from "../hooks/useGetPagamentos";
 import useGetPedidos from "../hooks/useGetPedidos";
 import usePostPedidos from "../hooks/usePostPedidos";
-import CreatePedidoType from "../types/createPedidoType";
 import PagamentoType from "../types/pagamentoType";
 import PedidoType from "../types/pedidoType";
 
@@ -47,27 +46,6 @@ export default function Home() {
   const pedidos = useGetPedidos();
   const pagamentos = useGetPagamentos();
   const criarPedido = usePostPedidos();
-
-  function enviarPedido(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    if (!cliente || !item) {
-      alert("Preencha o nome do cliente e o pedido.");
-      return;
-    }
-
-    const novoPedido: CreatePedidoType = {
-      cliente,
-      item,
-    };
-
-    criarPedido.mutate(novoPedido, {
-      onSuccess: () => {
-        setCliente("");
-        setItem("");
-      },
-    });
-  }
 
   const pedidosOrdenados = [...(pedidos.data ?? [])].reverse();
   const pagamentosOrdenados = pagamentos.data ?? [];
@@ -116,7 +94,7 @@ export default function Home() {
               Informe seus dados e aguarde a confirmação do pagamento.
             </p>
 
-            <form onSubmit={enviarPedido} className="mt-6 space-y-4">
+            <form className="mt-6 space-y-4">
               <div>
                 <label className="mb-1 block text-sm font-bold text-slate-700">
                   Nome do cliente
@@ -144,7 +122,23 @@ export default function Home() {
               </div>
 
               <button
-                type="submit"
+                type="button"
+                onClick={() => {
+                  if (!cliente || !item) {
+                    alert("Preencha o nome do cliente e o pedido.");
+                    return;
+                  }
+
+                  criarPedido.mutate(
+                    { cliente, item },
+                    {
+                      onSuccess: () => {
+                        setCliente("");
+                        setItem("");
+                      },
+                    },
+                  );
+                }}
                 disabled={criarPedido.isPending}
                 className="w-full rounded-2xl bg-orange-500 px-4 py-3 font-black text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
