@@ -124,6 +124,8 @@ export default function Home() {
               <button
                 type="button"
                 onClick={() => {
+                  console.log("CLIQUEI");
+
                   if (!cliente || !item) {
                     alert("Preencha o nome do cliente e o pedido.");
                     return;
@@ -133,14 +135,16 @@ export default function Home() {
                     { cliente, item },
                     {
                       onSuccess: () => {
+                        console.log("SALVOU");
                         setCliente("");
                         setItem("");
+                      },
+                      onError: (erro) => {
+                        console.error("ERRO AO SALVAR", erro);
                       },
                     },
                   );
                 }}
-                disabled={criarPedido.isPending}
-                className="w-full rounded-2xl bg-orange-500 px-4 py-3 font-black text-white transition hover:bg-orange-600 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {criarPedido.isPending ? "Enviando pedido..." : "Enviar pedido"}
               </button>
@@ -170,10 +174,15 @@ export default function Home() {
               )}
 
               {pagamentosOrdenados.map((pagamento) => (
-                <div key={pagamento.id} className="rounded-2xl border border-slate-200 p-4">
+                <div
+                  key={pagamento.id}
+                  className="rounded-2xl border border-slate-200 p-4"
+                >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-bold text-slate-900">{pagamento.cliente}</p>
+                      <p className="font-bold text-slate-900">
+                        {pagamento.cliente}
+                      </p>
                       <p className="text-sm text-slate-600">{pagamento.item}</p>
                     </div>
                     <span
@@ -196,7 +205,8 @@ export default function Home() {
           <section className="rounded-3xl bg-white p-6 text-slate-900 shadow-xl">
             <h2 className="text-2xl font-black">Pedidos</h2>
             <p className="mt-2 text-sm text-slate-500">
-              Acompanhe o preparo, a saída para entrega e a conclusão do seu pedido.
+              Acompanhe o preparo, a saída para entrega e a conclusão do seu
+              pedido.
             </p>
 
             {pedidos.isError && (
@@ -213,10 +223,15 @@ export default function Home() {
               )}
 
               {pedidosOrdenados.map((pedido: PedidoType) => (
-                <div key={pedido.id} className="rounded-2xl border border-slate-200 p-4">
+                <div
+                  key={pedido.id}
+                  className="rounded-2xl border border-slate-200 p-4"
+                >
                   <div className="flex items-start justify-between gap-3">
                     <div>
-                      <p className="font-bold text-slate-900">{pedido.cliente}</p>
+                      <p className="font-bold text-slate-900">
+                        {pedido.cliente}
+                      </p>
                       <p className="text-sm text-slate-600">{pedido.item}</p>
                     </div>
                     <span
