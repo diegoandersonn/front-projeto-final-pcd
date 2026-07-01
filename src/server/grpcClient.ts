@@ -8,7 +8,11 @@ import QueueMessageType from "../types/queueMessageType";
 
 const PEDIDOS_GRPC_TARGET = process.env.PEDIDOS_GRPC_URL ?? process.env.BACKEND_GRPC_URL ?? "localhost:50051";
 const PAGAMENTOS_GRPC_TARGET = process.env.PAGAMENTOS_GRPC_URL ?? process.env.BACKEND_GRPC_URL ?? "localhost:50052";
+<<<<<<< Updated upstream
 const PROTO_PATH = process.env.PROTO_PATH ?? "/proto/pcd.proto";
+=======
+const PROTO_PATH = process.env.PROTO_PATH ?? path.resolve(process.cwd(), "..", "proto", "pcd.proto");
+>>>>>>> Stashed changes
 
 type EmptyRequest = Record<string, never>;
 
