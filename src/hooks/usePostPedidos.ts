@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CreatePedidoType from "../types/createPedidoType";
+import { parseJsonResponse } from "../utils/http";
 
 const usePostPedidos = () => {
   const queryClient = useQueryClient();
@@ -13,7 +14,7 @@ const usePostPedidos = () => {
         body: JSON.stringify(data),
       });
 
-      return resposta.json();
+      return parseJsonResponse(resposta);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pedidos"] });

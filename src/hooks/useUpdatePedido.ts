@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import StatusEnum from "../enums/statusEnum";
+import { parseJsonResponse } from "../utils/http";
 
 type UpdatePedidoInput = {
   id: string;
@@ -19,11 +20,7 @@ const useUpdatePedido = () => {
         body: JSON.stringify(pedido),
       });
 
-      if (!response.ok) {
-        throw new Error("Erro ao alterar o pedido.");
-      }
-
-      return response.json();
+      return parseJsonResponse(response);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["pedidos"] });

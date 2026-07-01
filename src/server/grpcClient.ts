@@ -1,4 +1,3 @@
-import path from "node:path";
 import * as grpc from "@grpc/grpc-js";
 import * as protoLoader from "@grpc/proto-loader";
 import CreatePedidoType from "../types/createPedidoType";
@@ -9,7 +8,7 @@ import QueueMessageType from "../types/queueMessageType";
 
 const PEDIDOS_GRPC_TARGET = process.env.PEDIDOS_GRPC_URL ?? process.env.BACKEND_GRPC_URL ?? "localhost:50051";
 const PAGAMENTOS_GRPC_TARGET = process.env.PAGAMENTOS_GRPC_URL ?? process.env.BACKEND_GRPC_URL ?? "localhost:50052";
-const PROTO_PATH = path.resolve(process.cwd(), "..", "proto", "pcd.proto");
+const PROTO_PATH = process.env.PROTO_PATH ?? "/proto/pcd.proto";
 
 type EmptyRequest = Record<string, never>;
 
